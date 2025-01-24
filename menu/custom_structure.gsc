@@ -25,14 +25,21 @@ clientOptions()
             
     foreach(player in level.players)
     {
-        self addmenu("client_" + player getentitynumber(), player getName()); //works
-        self addSliderValue( "Give Liquids", 500, 500, 2000, 250, ::giveLiquid, player ); //works
-        self addToggle( "Give 10k Liquids", player.give10kLiquid, ::give10kLiquid, player ); //works
-        self addToggle( "Set Max Level", player.setMaxLevel, ::setMaxLevel, player ); //kinda works?
-        self addToggle( "Unlock All", player.unlock_all, ::do_all_challenges, player ); //works
-        self addToggle( "Max Weapon Level", player.max_weapons, ::max_weapon_level, player ); //works
-        self addToggle( "Unlock Achievements", player.unlock_achievements, ::unlockAchievements, player ); //works
-        self addToggle( "Unlock All EE's", player GetDStat("PlayerStatsList", "DARKOPS_GENESIS_SUPER_EE", "StatValue"), ::set_all_EE, player ); //works
+        /* PLAYER MENU */
+        self addmenu("client_" + player getentitynumber(), player getName());
+            self addToggle( "Set Max Level", player.setMaxLevel, ::setMaxLevel, player );
+            self addToggle( "Unlock All", player.unlock_all, ::do_all_challenges, player );
+            self addToggle( "Max Weapon Level", player.max_weapons, ::max_weapon_level, player );
+            self addToggle( "Unlock Achievements", player.unlock_achievements, ::unlockAchievements, player );
+            self addToggle( "Unlock All EE's", player GetDStat("PlayerStatsList", "DARKOPS_GENESIS_SUPER_EE", "StatValue"), ::set_all_EE, player ); //works
+            self addOpt("Liquid Divinium", ::newMenu, "liquids"); // Liquid Menu Option
+        
+        /* LIQUID DIVINIUM MENU */ 
+        self addmenu("liquids", "Give " + player getName() + ":");
+            self addToggle("1k Liquid Divinium", player.give1kLiquid, ::give1kLiquid, player);
+            self addToggle("5k Liquid Divinium", player.give5kLiquid, ::give5kLiquid, player);
+            self addToggle("10k Liquid Divinium", player.give10kLiquid, ::give10kLiquid, player);
+            self addToggle("25k Liquid Divinium", player.give25kLiquid, ::give25kLiquid, player);
     }
 }
 
