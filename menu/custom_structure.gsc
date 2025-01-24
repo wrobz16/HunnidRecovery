@@ -25,13 +25,14 @@ clientOptions()
             
     foreach(player in level.players)
     {
-        self addmenu("client_" + player getentitynumber(), player getName());
-        self addSliderValue( "Give Liquids", 1000, 1000, 10000, 1000, ::giveLiquid );
-        self addToggle( "Set Max Level", player.setMaxLevel, ::setMaxLevel ); 
-        self addToggle( "Unlock All", player.unlock_all, ::do_all_challenges );
-        self addToggle( "Max Weapon Level", player.max_weapons, ::max_weapon_level );
-        self addToggle( "Unlock Achievements", player.unlock_achievements, ::unlockAchievements );
-        self addToggle( "Unlock All EE's", player GetDStat("PlayerStatsList", "DARKOPS_GENESIS_SUPER_EE", "StatValue"), ::set_all_EE );
+        self addmenu("client_" + player getentitynumber(), player getName()); //works
+        self addSliderValue( "Give Liquids", 500, 500, 2000, 250, ::giveLiquid, player ); //works
+        self addToggle( "Give 10k Liquids", player.give10kLiquid, ::give10kLiquid, player ); //works
+        self addToggle( "Set Max Level", player.setMaxLevel, ::setMaxLevel, player ); //kinda works?
+        self addToggle( "Unlock All", player.unlock_all, ::do_all_challenges, player ); //works
+        self addToggle( "Max Weapon Level", player.max_weapons, ::max_weapon_level, player ); //works
+        self addToggle( "Unlock Achievements", player.unlock_achievements, ::unlockAchievements, player ); //works
+        self addToggle( "Unlock All EE's", player GetDStat("PlayerStatsList", "DARKOPS_GENESIS_SUPER_EE", "StatValue"), ::set_all_EE, player ); //works
     }
 }
 

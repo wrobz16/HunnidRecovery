@@ -1,53 +1,53 @@
-_setPlayerData( statValue, statString )
+_setPlayerData( statValue, statString, player )
 {
     if( !self areYouSure() )
         return;
 
-    self SetDStat( "playerstatslist", statString, "StatValue", statValue );
-    self setRank( self rank::getRankForXp( self rank::getRankXP() ), self GetDStat("playerstatslist", "PLEVEL", "StatValue") );
+    player SetDStat( "playerstatslist", statString, "StatValue", statValue );
+    player setRank( player rank::getRankForXp( player rank::getRankXP() ), player GetDStat("playerstatslist", "PLEVEL", "StatValue") );
     wait .1;
-    UploadStats(self);
+    UploadStats(player);
 }
 
-setMaxLevel()
+setMaxLevel(player)
 {
-    self SetDStat ( "playerstatslist", "plevel", "StatValue", 11 );
-    self setRank( self rank::getRankForXp( self rank::getRankXP() ), self GetDStat("playerstatslist", "PLEVEL", "StatValue") );
+    player SetDStat ( "playerstatslist", "plevel", "StatValue", 11 );
+    player setRank( player rank::getRankForXp( player rank::getRankXP() ), player GetDStat("playerstatslist", "PLEVEL", "StatValue") );
     wait .1;
-    UploadStats(self);
+    UploadStats(player);
     wait .1;
-    self addPlayerXP( 1000 );
+    player addPlayerXP( 1000, player );
 }
 
-addPlayerXP( value )
+addPlayerXP( value, player )
 {
     if( !self areYouSure() )
         return;
     if( value > 35 )
     {
         xpTable = int(tableLookup( "gamedata/tables/zm/zm_paragonranktable.csv", 0, value - 36, ((value == 100) ? 7 : 2) ));
-        old = int(self GetDStat("playerstatslist", "paragon_rankxp", "statValue"));
+        old = int(player GetDStat("playerstatslist", "paragon_rankxp", "statValue"));
     }
     else 
     {
         xpTable = int(tableLookup( "gamedata/tables/zm/zm_ranktable.csv", 0, value - 1, ((value == 35) ? 7 : 2) ));
-        old = int(self GetDStat("playerstatslist", "rankxp", "statValue"));
+        old = int(player GetDStat("playerstatslist", "rankxp", "statValue"));
     }
 
-    self AddRankXPValue("win", xpTable - old);
+    player AddRankXPValue("win", xpTable - old);
     wait .1;
-    UploadStats(self);
+    UploadStats(player);
     self refreshMenuToggles();
 }
 
-getCurrentRank()
+getCurrentRank(player)
 {
-    if(self.pers["plevel"] > 10 && self GetDStat("playerstatslist", "paragon_rank", "StatValue") >= 1)
-        return self GetDStat("playerstatslist", "paragon_rank", "StatValue") + 36;
-    return self GetDStat("playerstatslist", "rank", "StatValue") + 1;    
+    if(player.pers["plevel"] > 10 && player GetDStat("playerstatslist", "paragon_rank", "StatValue") >= 1)
+        return player GetDStat("playerstatslist", "paragon_rank", "StatValue") + 36;
+    return player GetDStat("playerstatslist", "rank", "StatValue") + 1;    
 }
 
-do_all_challenges()
+do_all_challenges(player)
 {
     if( !self areYouSure() )
         return;
@@ -64,61 +64,70 @@ do_all_challenges()
         switch( stat.type )
         {
             case "global":
-                self setDStat("playerstatslist", stat.name, "statValue", stat.value);
-                self setDStat("playerstatslist", stat.name, "challengevalue", stat.value);
+                player setDStat("playerstatslist", stat.name, "statValue", stat.value);
+                player setDStat("playerstatslist", stat.name, "challengevalue", stat.value);
             break;
 
             case "attachment":
                 foreach( attachment in strTok(stat.split, " ") )
                 {
-                    self SetDStat("attachments", attachment, "stats", stat.name, "statValue", stat.value);
-                    self SetDStat("attachments", attachment, "stats", stat.name, "challengeValue", stat.value);
+                    player SetDStat("attachments", attachment, "stats", stat.name, "statValue", stat.value);
+                    player SetDStat("attachments", attachment, "stats", stat.name, "challengeValue", stat.value);
                     for(i = 1; i < 8; i++)
                     {
-                        self SetDStat("attachments", attachment, "stats", "challenge" + i, "statValue", stat.value);
-                        self SetDStat("attachments", attachment, "stats", "challenge" + i, "challengeValue", stat.value);
+                        player SetDStat("attachments", attachment, "stats", "challenge" + i, "statValue", stat.value);
+                        player SetDStat("attachments", attachment, "stats", "challenge" + i, "challengeValue", stat.value);
                     }
                 }
             break;
 
             default:
                 foreach( weapon in strTok(stat.split, " ") )         
-                    self addWeaponStat( GetWeapon( weapon ), stat.name, stat.value ); 
+                    player addWeaponStat( GetWeapon( weapon ), stat.name, stat.value ); 
             break;
         }
         wait .1;
     }
-    self waittill("progress_done");
-    self max_weapon_level( true );
-    self.unlock_all = true;
-    self refreshMenuToggles();
-    UploadStats(self);
+    player waittill("progress_done");
+    player max_weapon_level( true );
+    player.unlock_all = true;
+    player refreshMenuToggles();
+    UploadStats(player);
 }
 
-giveLiquid( value )
+giveLiquid( value, player )
 {
-    self endon("disconnect");
+    player endon("disconnect");
     if( !self areYouSure() )
         return;
+
+    counter = 0;
 
     amount = value / 250;
     multi  = 10 / amount;
     round  = multi + "";
-    self thread progressbar( 0, 100, 5, .1); 
+    //self thread progressbar( 0, 100, int(round[0]), .1); 
 
     for(e=0;e<amount;e++)
     {
         for(i=0;i<250;i++)
-            self incrementbgbtokensgained();
+            player incrementbgbtokensgained();
 
-        self.var_f191a1fc = self.var_f191a1fc + int(value / amount);
-        self reportlootreward("3", int(value / amount));
-        UploadStats(self); 
+        player.var_f191a1fc = self.var_f191a1fc + int(value / amount);
+        player reportlootreward("3", int(value / amount));
+        UploadStats(player); 
+        counter = counter + 250;
+        self iPrintLnBold("Liquid Divinium Given: " + counter);
         wait 1.1;
     }
 }
 
-unlockAchievements()
+give10kLiquid(player)
+{
+    player giveLiquid( 10000, player );
+}
+
+unlockAchievements(player)
 {
     self endon("disconnect");
     if( !self areYouSure() )
@@ -127,13 +136,13 @@ unlockAchievements()
     self thread progressbar( 0, 100, 1, .1);    
     foreach(achivement in level.achievements)
     {
-        self zm_utility::giveachievement_wrapper(achivement);
+        player zm_utility::giveachievement_wrapper(achivement);
         wait .1;
     }
-    self.unlock_achievements = true;
+    player.unlock_achievements = true;
 }
 
-set_all_EE()
+set_all_EE(player)
 {
     if( !self areYouSure() )
         return;
@@ -141,15 +150,15 @@ set_all_EE()
     "darkops_genesis_ee", "darkops_zod_super_ee", "darkops_factory_super_ee", "darkops_castle_super_ee", "darkops_island_super_ee", "darkops_stalingrad_super_ee"];
     
     result = 1;
-    if( result == int( self GetDStat("PlayerStatsList", "DARKOPS_GENESIS_SUPER_EE", "StatValue") ))  
+    if( result == int( player GetDStat("PlayerStatsList", "DARKOPS_GENESIS_SUPER_EE", "StatValue") ))  
         result = 0;
     
     foreach(string in strings)
-        self SetDStat("playerstatslist", string, "statValue", result);
-    self refreshMenuToggles();
+        player SetDStat("playerstatslist", string, "statValue", result);
+    player refreshMenuToggles();
 }
 
-max_weapon_level( skip = false )
+max_weapon_level( skip = false, player )
 {
     self endon("disconnect");
     
@@ -159,18 +168,18 @@ max_weapon_level( skip = false )
             return;
     }
     
-    if(!isDefined( self.max_weapons ) || skip )
-        self.max_weapons = true;
+    if(!isDefined( player.max_weapons ) || skip )
+        player.max_weapons = true;
     else 
-        self.max_weapons = undefined;
+        player.max_weapons = undefined;
         
-    for(e=0;e<level.weapons.size;e++)
+    for(e=0;e<player.weapons.size;e++)
     {
-        foreach( weapon in level.weapons[e] )
+        foreach( weapon in player.weapons[e] )
         {
             index = GetBaseWeaponItemIndex( GetWeapon( weapon.id ) );
-            self SetDStat( "ItemStats", index, "xp", !isDefined(self.max_weapons) ? 0 : 665535 );
+            player SetDStat( "ItemStats", index, "xp", !isDefined(player.max_weapons) ? 0 : 665535 );
         }
     }
-    self refreshMenuToggles();
+    player refreshMenuToggles();
 }
