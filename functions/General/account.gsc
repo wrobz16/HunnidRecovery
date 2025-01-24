@@ -105,8 +105,6 @@ giveLiquid( value, player )
 
     amount = value / 250;
     multi  = 10 / amount;
-    round  = multi + "";
-    //self thread progressbar( 0, 100, int(round[0]), .1); 
 
     for(e=0;e<amount;e++)
     {
@@ -122,9 +120,24 @@ giveLiquid( value, player )
     }
 }
 
+give1kLiquid(player)
+{
+    player giveLiquid( 1000, player );
+}
+
+give5kLiquid(player)
+{
+    player giveLiquid( 5000, player );
+}
+
 give10kLiquid(player)
 {
     player giveLiquid( 10000, player );
+}
+
+give25kLiquid(player)
+{
+    player giveLiquid( 25000, player );
 }
 
 unlockAchievements(player)
