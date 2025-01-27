@@ -47,9 +47,9 @@ areYouSure()
     xPos     = self.menu["OPT"][cap_curs].x + ((IsDefined( self.eMenu[ self getCursor() ].toggle )) ? 0 : 20);
     
     youSure  = [];
-    youSure[youSure.size] = self createRectangle("RIGHT", "CENTER", xPos + 221, self.menu["OPT"][cap_curs].y, 18, 12, rgb(15,14,15), "white", 5, 1); //INNER
-    youSure[youSure.size] = self createRectangle("RIGHT", "CENTER", xPos + 202, self.menu["OPT"][cap_curs].y, 18, 12, rgb(62,58,63), "white", 5, 1); //INNER
-    youSure[youSure.size] = self createRectangle("RIGHT", "CENTER", xPos + 222, self.menu["OPT"][cap_curs].y, 39, 14, (0,0,0), "white", 4, 1); //BG
+    youSure[youSure.size] = self createRectangle("RIGHT", "CENTER", xPos + 221, self.menu["OPT"][cap_curs].y, 18, 12, rgb(0,110,10), "white", 5, 1); //INNER
+    youSure[youSure.size] = self createRectangle("RIGHT", "CENTER", xPos + 202, self.menu["OPT"][cap_curs].y, 18, 12, rgb(0,65,0), "white", 5, 1); //INNER
+    youSure[youSure.size] = self createRectangle("RIGHT", "CENTER", xPos + 222, self.menu["OPT"][cap_curs].y, 39, 14, rgb(0,110,10), "white", 4, 1); //BG
     youSure[youSure.size] = self createText("small", 1, "LEFT", "CENTER", xPos + 185, self.menu["OPT"][cap_curs].y, 6, 1, " Yes     No", (1,1,1));
     youSure[youSure.size] = self createText("small", 1, "RIGHT", "CENTER", xPos + 180, self.menu["OPT"][cap_curs].y, 5, 1, "Are You Sure?", (1,1,1));
     wait .2;
@@ -59,13 +59,13 @@ areYouSure()
     {
         if( self attackButtonPressed() || self adsButtonPressed() )
         {
-            youSure[curs].color = rgb(62,58,63);
+            youSure[curs].color = rgb(0,65,10);
             curs += self attackButtonPressed();
             curs -= self adsButtonPressed();
             
             if( curs < 0 ) curs = 1;
             if( curs > 1 ) curs = 0;
-            youSure[curs].color = rgb(15,14,15);
+            youSure[curs].color = rgb(0,110,10);
             wait .2;
         }
         wait .05;
