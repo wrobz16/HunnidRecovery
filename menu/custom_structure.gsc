@@ -259,7 +259,7 @@ setMenuText()
         if(IsDefined( self.eMenu[ ary + e ].toggle ))
         {
             self.menu["OPT"][e].x += 20; 
-            self.menu["UI_TOG"][e] = self createRectangle("LEFT", "CENTER", self.menu["OPT"][e].x - 20, self.menu["OPT"][e].y, 14, 14, (0,0,0), "white", 4, 1); //BG
+            self.menu["UI_TOG"][e] = self createRectangle("LEFT", "CENTER", self.menu["OPT"][e].x - 20, self.menu["OPT"][e].y, 14, 14, rgb(0,110,10), "white", 4, 1); //BG
             self.menu["UI_TOG"][e + 10] = self createRectangle("CENTER", "CENTER", self.menu["UI_TOG"][e].x + 7, self.menu["UI_TOG"][e].y, 12, 12, (self.eMenu[ ary + e ].toggle) ? self.presets["SCROLL_STITLE_BG"] : self.presets["TITLE_OPT_BG"], "white", 5, 1); //INNER
         }
         if(IsDefined( self.eMenu[ ary + e ].val ))
