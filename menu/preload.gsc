@@ -105,7 +105,7 @@ get_preset( preset )
     if( preset == "TITLE_OPT_BG" )
         return rgb(5,200,25);
     if( preset == "SCROLL_STITLE_BG" )
-        return rgb(0,110,10); //"rainbow";
+        return rgb(0,110,10);
     if( preset == "TEXT" )
         return (1,1,1);
     if( preset == "X" )
