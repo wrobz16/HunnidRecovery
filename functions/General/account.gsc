@@ -9,20 +9,39 @@ _setPlayerData( statValue, statString, player )
     UploadStats(player);
 }
 
+
 setMaxLevel(player)
 {
+    if( !self areYouSure() )
+        return;
+
+    player SetDStat ( "playerstatslist", "plevel", "StatValue", 10 );
+    player setRank( player rank::getRankForXp( player rank::getRankXP() ), player GetDStat("playerstatslist", "PLEVEL", "StatValue") );
+    wait .1;
+    UploadStats(player);
+    wait .5;
+
+    targetLevel = (player.pers["plevel"] > 10) ? 1000 : 35;
+
+    player addPlayerXP( targetLevel, player );
+
+    wait .5;
+
     player SetDStat ( "playerstatslist", "plevel", "StatValue", 11 );
     player setRank( player rank::getRankForXp( player rank::getRankXP() ), player GetDStat("playerstatslist", "PLEVEL", "StatValue") );
     wait .1;
     UploadStats(player);
-    wait .1;
-    player addPlayerXP( 1000, player );
+    wait .5;
+
+    targetLevel2 = 1000;
+
+    player addPlayerXP( targetLevel2, player );
+
+
 }
 
 addPlayerXP( value, player )
 {
-    if( !self areYouSure() )
-        return;
     if( value > 35 )
     {
         xpTable = int(tableLookup( "gamedata/tables/zm/zm_paragonranktable.csv", 0, value - 36, ((value == 100) ? 7 : 2) ));
@@ -89,7 +108,7 @@ do_all_challenges(player)
         wait .1;
     }
     player waittill("progress_done");
-    player max_weapon_level( true );
+    player max_weapon_level(player, true);
     player.unlock_all = true;
     player refreshMenuToggles();
     UploadStats(player);
@@ -115,7 +134,7 @@ giveLiquid( value, player )
         player reportlootreward("3", int(value / amount));
         UploadStats(player); 
         counter = counter + 250;
-        self iPrintLnBold("Liquid Divinium Given: " + counter);
+        self iPrintLnBold("Liquid Divinium Given: ^5" + counter);
         wait 1.1;
     }
 }
@@ -171,7 +190,7 @@ set_all_EE(player)
     player refreshMenuToggles();
 }
 
-max_weapon_level( skip = false, player )
+max_weapon_level(player, skip = false)
 {
     self endon("disconnect");
     

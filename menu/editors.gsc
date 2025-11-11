@@ -21,7 +21,7 @@ progressbar( min, max, mult, time )
             xPosition -= 20;
 
         progress = [];
-        progress[progress.size] = self createRectangle("RIGHT", "CENTER", xPosition + 240, self.menu["OPT"][cap_curs].y, 108, 14, (0,0,0), "white", 4, 1); //BG
+        progress[progress.size] = self createRectangle("RIGHT", "CENTER", xPosition + 240, self.menu["OPT"][cap_curs].y, 108, 14, rgb(0,65,0), "white", 4, 1); //BG
         progress[progress.size] = self createRectangle("LEFT", "CENTER", progress[progress.size-1].x -107 + (curs / position_x), progress[progress.size-1].y, 12, 12, self.presets["SCROLL_STITLE_BG"], "white", 5, 1); //INNER
         progress[progress.size] = self createText("objective", 1, "RIGHT", "CENTER", xPosition + 111, progress[progress.size-2].y, 5, 1, int( min(curs, 100) ), (1,1,1));
         progress[progress.size] = self createText("objective", 1, "RIGHT", "CENTER", xPosition + 126, progress[progress.size-2].y, 5, 1, "/" + max, (1,1,1));
