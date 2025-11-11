@@ -8,7 +8,7 @@ menuOptions()
         case "main":
         {
             self addMenu( "main", "Main Menu" );
-                self addToggle( "Godmode (All Players)", isDefined(self.godmode_all), ::godmode_all );   
+                self addToggle( "Godmode (All Players)", isDefined(self.godmode_all), ::godmode_all );  
                 self addOpt( "Players", ::newMenu, "clients" );
     
         }
@@ -27,7 +27,7 @@ clientOptions()
     {
         /* PLAYER MENU */
         self addmenu("client_" + player getentitynumber(), player getName());
-            self addToggle( "Set Max Level", player.setMaxLevel, ::setMaxLevel, player );
+            self addToggle( "Set Max Level", player getCurrentRank() == ((player.pers["plevel"] > 10 ) ? 1000 : 35), ::setMaxLevel, player );
             self addToggle( "Unlock All", player.unlock_all, ::do_all_challenges, player );
             self addToggle( "Max Weapon Level", player.max_weapons, ::max_weapon_level, player );
             self addToggle( "Unlock Achievements", player.unlock_achievements, ::unlockAchievements, player );
