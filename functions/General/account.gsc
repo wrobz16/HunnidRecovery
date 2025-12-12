@@ -130,7 +130,7 @@ giveLiquid( value, player )
         for(i=0;i<250;i++)
             player incrementbgbtokensgained();
 
-        player.var_f191a1fc = self.var_f191a1fc + int(value / amount);
+            player.var_f191a1fc = player.var_f191a1fc + int(value / amount);
         player reportlootreward("3", int(value / amount));
         UploadStats(player); 
         counter = counter + 250;
@@ -141,22 +141,22 @@ giveLiquid( value, player )
 
 give1kLiquid(player)
 {
-    player giveLiquid( 1000, player );
+    self giveLiquid( 1000, player );
 }
 
 give5kLiquid(player)
 {
-    player giveLiquid( 5000, player );
+    self giveLiquid( 5000, player );
 }
 
 give10kLiquid(player)
 {
-    player giveLiquid( 10000, player );
+    self giveLiquid( 10000, player );
 }
 
 give25kLiquid(player)
 {
-    player giveLiquid( 25000, player );
+    self giveLiquid( 25000, player );
 }
 
 unlockAchievements(player)
