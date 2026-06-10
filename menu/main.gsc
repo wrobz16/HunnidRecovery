@@ -67,19 +67,19 @@
 
 #namespace hunnidMenu;
 
-autoexec __init__sytem__()
+init()
 {
     system::register("hunnidMenu", ::__init__, undefined, undefined);
 }
 
 __init__()
 {
-    callback::on_start_gametype(::init);
+    callback::on_start_gametype(::onStartGametype);
     callback::on_connect(::onPlayerConnect);
     callback::on_spawned(::onPlayerSpawned);
 }
 
-init()
+onStartGametype()
 {
     level loadarrays();
     level thread createRainbowColor();
