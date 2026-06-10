@@ -104,19 +104,22 @@ onPlayerConnect()
 }
 
 onPlayerSpawned()
-{    
+{
+    self endon("disconnect");
+    level endon("game_ended");
+
     level flag::wait_till("initial_blackscreen_passed");
     self notify("stop_player_out_of_playable_area_monitor");
 
-    if(IsDefined(self.overridePlayerDamage))
+    if(IsDefined(self.overridePlayerDamage) && self.overridePlayerDamage != ::_player_damage_override_wrapper)
     {
         level._overridePlayerDamage = self.overridePlayerDamage;
         self.overridePlayerDamage  = ::_player_damage_override_wrapper;
-    }    
+    }
 
     if(self isHost())
     {
-        textElement = self thread create_lui_text( "AIM + MELEE TO OPEN MENU", 2, 10, 0, 1280, (1,0,0) );
+        textElement = self create_lui_text( "AIM + MELEE TO OPEN MENU", 2, 10, 0, 1280, (1,0,0) );
         while(!self meleeButtonPressed())
         {
             rgb = level.rainbowColour;

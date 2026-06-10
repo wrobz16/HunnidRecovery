@@ -34,7 +34,7 @@ initializeSetup( access, player )
 newMenu( menu, access = 0 )
 {
     if( access >= self.access )
-        return self IPrintLn( "Access level denined." );
+        return self IPrintLn( "Access level denied." );
     if(!isDefined( menu ))
     {
         menu = self.previousMenu[ self.previousMenu.size -1 ];

@@ -101,11 +101,11 @@ load_presets()
 get_preset( preset )
 {
     if( preset == "OUTLINE" )
-        return rgb(0,65,0);
+        return rgb(110,65,150);      // violet frame
     if( preset == "TITLE_OPT_BG" )
-        return rgb(5,200,25);
+        return rgb(14,14,17);        // dark glass panel / title bar / toggle-off
     if( preset == "SCROLL_STITLE_BG" )
-        return rgb(0,110,10);
+        return rgb(155,89,182);      // violet accent: selection / brand title / scrollbar thumb / toggle-on
     if( preset == "TEXT" )
         return (1,1,1);
     if( preset == "X" )

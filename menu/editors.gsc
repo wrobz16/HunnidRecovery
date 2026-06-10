@@ -1,30 +1,30 @@
-progressbar( min, max, mult, time )
-{        
+progressbar( lo, hi, mult, time )
+{
     if( isDefined( self.was_edited ))
         return true;
 
     self endon("disconnect");
-    curs     = min-1;
+    curs     = lo-1;
     cap_curs = (self getCursor() > 10) ? 9 : self getCursor();
     
     self lockMenu("lock", "open");
     self thread deleteLineInfo();
 
-    while( curs <= max-1 )
+    while( curs <= hi-1 )
     {
         curs += mult;
-        math       = (98 / max) * curs;
-        position_x = (max) / ((108 - 14));
+        math       = (98 / hi) * curs;
+        position_x = (hi) / ((108 - 14));
         xPosition = self.menu["OPT"][cap_curs].x;
 
         if(IsDefined( self.eMenu[ cap_curs ].toggle ))
             xPosition -= 20;
 
         progress = [];
-        progress[progress.size] = self createRectangle("RIGHT", "CENTER", xPosition + 240, self.menu["OPT"][cap_curs].y, 108, 14, rgb(0,65,0), "white", 4, 1); //BG
+        progress[progress.size] = self createRectangle("RIGHT", "CENTER", xPosition + 240, self.menu["OPT"][cap_curs].y, 108, 14, rgb(26,26,31), "white", 4, 1); //BG (dark glass)
         progress[progress.size] = self createRectangle("LEFT", "CENTER", progress[progress.size-1].x -107 + (curs / position_x), progress[progress.size-1].y, 12, 12, self.presets["SCROLL_STITLE_BG"], "white", 5, 1); //INNER
         progress[progress.size] = self createText("objective", 1, "RIGHT", "CENTER", xPosition + 111, progress[progress.size-2].y, 5, 1, int( min(curs, 100) ), (1,1,1));
-        progress[progress.size] = self createText("objective", 1, "RIGHT", "CENTER", xPosition + 126, progress[progress.size-2].y, 5, 1, "/" + max, (1,1,1));
+        progress[progress.size] = self createText("objective", 1, "RIGHT", "CENTER", xPosition + 126, progress[progress.size-2].y, 5, 1, "/" + hi, (1,1,1));
         
         wait time;
         self destroyAll( progress );
@@ -40,32 +40,34 @@ areYouSure()
     if( isDefined( self.was_edited ))
         return true;
 
+    self endon("disconnect");
     self lockMenu("lock", "open");
     self thread deleteLineInfo();
     
     cap_curs = (self getCursor() > 10) ? 9 : self getCursor();
     xPos     = self.menu["OPT"][cap_curs].x + ((IsDefined( self.eMenu[ self getCursor() ].toggle )) ? 0 : 20);
     
-    youSure  = [];
-    youSure[youSure.size] = self createRectangle("RIGHT", "CENTER", xPos + 221, self.menu["OPT"][cap_curs].y, 18, 12, rgb(0,110,10), "white", 5, 1); //INNER
-    youSure[youSure.size] = self createRectangle("RIGHT", "CENTER", xPos + 202, self.menu["OPT"][cap_curs].y, 18, 12, rgb(0,65,0), "white", 5, 1); //INNER
-    youSure[youSure.size] = self createRectangle("RIGHT", "CENTER", xPos + 222, self.menu["OPT"][cap_curs].y, 39, 14, rgb(0,110,10), "white", 4, 1); //BG
-    youSure[youSure.size] = self createText("small", 1, "LEFT", "CENTER", xPos + 185, self.menu["OPT"][cap_curs].y, 6, 1, " Yes     No", (1,1,1));
-    youSure[youSure.size] = self createText("small", 1, "RIGHT", "CENTER", xPos + 180, self.menu["OPT"][cap_curs].y, 5, 1, "Are You Sure?", (1,1,1));
+    dim = rgb(120,120,130);
+
+    youSure          = [];
+    youSure["label"] = self createText("small", 1, "RIGHT", "CENTER", xPos + 180, self.menu["OPT"][cap_curs].y, 5, 1, "Are You Sure?", (1,1,1));
+    youSure["yes"]   = self createText("small", 1, "LEFT",  "CENTER", xPos + 186, self.menu["OPT"][cap_curs].y, 6, 1, "Yes", (1,1,1)); //selected by default
+    youSure["no"]    = self createText("small", 1, "LEFT",  "CENTER", xPos + 210, self.menu["OPT"][cap_curs].y, 6, 1, "No",  dim);
     wait .2;
-    
-    curs = 0;
+
+    curs = 0; // 0 = Yes, 1 = No
     while(!self UseButtonPressed())
     {
         if( self attackButtonPressed() || self adsButtonPressed() )
         {
-            youSure[curs].color = rgb(0,65,10);
             curs += self attackButtonPressed();
             curs -= self adsButtonPressed();
-            
+
             if( curs < 0 ) curs = 1;
             if( curs > 1 ) curs = 0;
-            youSure[curs].color = rgb(0,110,10);
+
+            youSure["yes"].color = (curs == 0) ? (1,1,1) : dim;
+            youSure["no"].color  = (curs == 1) ? (1,1,1) : dim;
             wait .2;
         }
         wait .05;
@@ -89,7 +91,8 @@ deleteLineInfo( curs = self getCursor() )
 }
 
 do_keyboard( title = "Keyboard" )
-{ 
+{
+    self endon("disconnect");
     keys = [];
     keys[0] = ["0", "A", "N", ":"];
     keys[1] = ["1", "B", "O", ";"];

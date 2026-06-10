@@ -27,19 +27,19 @@ clientOptions()
     {
         /* PLAYER MENU */
         self addmenu("client_" + player getentitynumber(), player getName());
-            self addToggle( "Set Max Level", player getCurrentRank() == ((player.pers["plevel"] > 10 ) ? 1000 : 35), ::setMaxLevel, player );
-            self addToggle( "Unlock All", player.unlock_all, ::do_all_challenges, player );
-            self addToggle( "Max Weapon Level", player.max_weapons, ::max_weapon_level, player );
-            self addToggle( "Unlock Achievements", player.unlock_achievements, ::unlockAchievements, player );
-            self addToggle( "Unlock All EE's", player GetDStat("PlayerStatsList", "DARKOPS_GENESIS_SUPER_EE", "StatValue"), ::set_all_EE, player ); //works
+            self addOpt( "Set Max Level", ::setMaxLevel, player );
+            self addOpt( "Unlock All", ::do_all_challenges, player );
+            self addOpt( "Max Weapon Level", ::max_weapon_level, player );
+            self addOpt( "Unlock Achievements", ::unlockAchievements, player );
+            self addOpt( "Unlock All EE's", ::set_all_EE, player );
             self addOpt("Liquid Divinium", ::newMenu, "liquids" + player GetEntityNumber()); // Liquid Menu Option
         
         /* LIQUID DIVINIUM MENU */ 
         self addmenu("liquids" + player GetEntityNumber(), "Give " + player getName() + ":");
-            self addToggle("1k Liquid Divinium", player.give1kLiquid, ::give1kLiquid, player);
-            self addToggle("5k Liquid Divinium", player.give5kLiquid, ::give5kLiquid, player);
-            self addToggle("10k Liquid Divinium", player.give10kLiquid, ::give10kLiquid, player);
-            self addToggle("25k Liquid Divinium", player.give25kLiquid, ::give25kLiquid, player);
+            self addOpt("1k Liquid Divinium", ::give1kLiquid, player);
+            self addOpt("5k Liquid Divinium", ::give5kLiquid, player);
+            self addOpt("10k Liquid Divinium", ::give10kLiquid, player);
+            self addOpt("25k Liquid Divinium", ::give25kLiquid, player);
     }
 }
 
@@ -178,16 +178,17 @@ drawMenu()
     if(!isDefined(self.menu["UI_STRING"]))
         self.menu["UI_STRING"] = [];    
         
-    self.menu["UI"]["TITLE_BG"] = self createRectangle("LEFT", "CENTER", self.presets["X"], self.presets["Y"] - 108, 260, 23, self.presets["TITLE_OPT_BG"], "white", 1, 1);
-    self.menu["UI"]["SUBT_BG"] = self createRectangle("LEFT", "CENTER", self.presets["X"], self.presets["Y"] - 83, 260, 23, self.presets["SCROLL_STITLE_BG"], "white", 1, 1);
-    
-    self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"], self.presets["Y"] - 70, 260, 182, self.presets["TITLE_OPT_BG"], "white", 1, 1);    
-    self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] - 1.6, self.presets["Y"] - 121.5, 263, 234, self.presets["OUTLINE"], "white", 0, 1);
-    self.menu["UI"]["SCROLLER"] = self createRectangle("LEFT", "CENTER", self.presets["X"], self.presets["Y"] - 108, 250, 20, self.presets["SCROLL_STITLE_BG"], "white", 2, 1);
-    
-    self.menu["UI"]["SIDE_SCR_BG"] = self createRectangle("TOPRIGHT", "CENTER", self.presets["X"] + 260, self.presets["Y"] - 70, 9, 182, self.presets["SCROLL_STITLE_BG"], "white", 2, 1);
-    
-    self.menu["UI"]["SIDE_SCR"] = self createRectangle("TOPRIGHT", "CENTER", self.presets["X"] + 257, self.presets["Y"] - 62, 4, 40, self.presets["TITLE_OPT_BG"], "white", 3, 1);
+    self.menu["UI"]["TITLE_BG"] = self createRectangle("LEFT", "CENTER", self.presets["X"], self.presets["Y"] - 108, 260, 23, self.presets["TITLE_OPT_BG"], "white", 1, .85); //dark glass header
+    self.menu["UI"]["SUBT_BG"] = self createRectangle("LEFT", "CENTER", self.presets["X"], self.presets["Y"] - 83, 260, 23, rgb(26,26,31), "white", 1, .85); //slightly lighter sub-header
+
+    self.menu["UI"]["OPT_BG"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"], self.presets["Y"] - 70, 260, 182, self.presets["TITLE_OPT_BG"], "white", 1, .82); //dark glass body
+    self.menu["UI"]["OUTLINE"] = self createRectangle("TOPLEFT", "CENTER", self.presets["X"] - 1.6, self.presets["Y"] - 121.5, 263, 234, self.presets["OUTLINE"], "white", 0, .9); //violet frame
+    self.menu["UI"]["SCROLLER"] = self createRectangle("LEFT", "CENTER", self.presets["X"], self.presets["Y"] - 108, 250, 20, self.presets["SCROLL_STITLE_BG"], "white", 2, .2); //faint accent tint on selected row
+    self.menu["UI"]["SCROLL_STRIPE"] = self createRectangle("LEFT", "CENTER", self.presets["X"], self.presets["Y"] - 108, 3, 20, self.presets["SCROLL_STITLE_BG"], "white", 3, 1); //solid accent stripe on left edge of selected row
+
+    self.menu["UI"]["SIDE_SCR_BG"] = self createRectangle("TOPRIGHT", "CENTER", self.presets["X"] + 260, self.presets["Y"] - 70, 9, 182, rgb(40,40,46), "white", 2, .7); //dark track
+
+    self.menu["UI"]["SIDE_SCR"] = self createRectangle("TOPRIGHT", "CENTER", self.presets["X"] + 257, self.presets["Y"] - 62, 4, 40, self.presets["SCROLL_STITLE_BG"], "white", 3, 1); //violet thumb
     self resizeMenu();
 }
 
@@ -196,7 +197,7 @@ drawText()
     if(!isDefined(self.menu["OPT"]))
         self.menu["OPT"] = [];
     
-    self.menu["OPT"]["MENU_NAME"] = self createText("hudsmall", 1, "CENTER", "CENTER", self.presets["X"] + 130, self.presets["Y"] - 108, 3, 1, level.menuName, self.presets["TEXT"]);  
+    self.menu["OPT"]["MENU_NAME"] = self createText("hudsmall", 1, "CENTER", "CENTER", self.presets["X"] + 130, self.presets["Y"] - 108, 3, 1, level.menuName, self.presets["SCROLL_STITLE_BG"]); //green brand title
     self.menu["OPT"]["MENU_TITLE"] = self createText("objective", 1.1, "CENTER", "CENTER", self.presets["X"] + 130, self.presets["Y"] - 83, 3, 1, self.menuTitle, self.presets["TEXT"]);
 
     for(e=0;e<10;e++)
@@ -224,8 +225,9 @@ scrollingSystem()
 
 updateScrollbar()
 {
-    curs = (self getCursor() >= 10) ? 9 : self getCursor();  
+    curs = (self getCursor() >= 10) ? 9 : self getCursor();
     self.menu["UI"]["SCROLLER"].y = (self.menu["OPT"][curs].y);
+    self.menu["UI"]["SCROLL_STRIPE"].y = (self.menu["OPT"][curs].y);
     
     size       = (self.eMenu.size >= 10) ? 10 : self.eMenu.size;
     height     = int(18*size);
@@ -249,18 +251,17 @@ setMenuText()
     
     for(e=0;e<10;e++)
     {
-        self.menu["OPT"][e].x = self.presets["X"] + 5; 
-        
+        self.menu["OPT"][e].x = self.presets["X"] + 5;
+
         if(isDefined(self.eMenu[ ary + e ].opt))
             self.menu["OPT"][e] setText( self.eMenu[ ary + e ].opt );
-        else 
+        else
             self.menu["OPT"][e] setText("");
             
         if(IsDefined( self.eMenu[ ary + e ].toggle ))
         {
-            self.menu["OPT"][e].x += 20; 
-            self.menu["UI_TOG"][e] = self createRectangle("LEFT", "CENTER", self.menu["OPT"][e].x - 20, self.menu["OPT"][e].y, 14, 14, rgb(0,110,10), "white", 4, 1); //BG
-            self.menu["UI_TOG"][e + 10] = self createRectangle("CENTER", "CENTER", self.menu["UI_TOG"][e].x + 7, self.menu["UI_TOG"][e].y, 12, 12, (self.eMenu[ ary + e ].toggle) ? self.presets["SCROLL_STITLE_BG"] : self.presets["TITLE_OPT_BG"], "white", 5, 1); //INNER
+            on = self.eMenu[ ary + e ].toggle;
+            self.menu["UI_TOG"][e] = self createText("default", 1, "RIGHT", "CENTER", self.menu["OPT"][e].x + 240, self.menu["OPT"][e].y, 6, 1, (on ? "ON" : "OFF"), (on ? self.presets["SCROLL_STITLE_BG"] : rgb(120,120,130))); //right-side ON/OFF indicator
         }
         if(IsDefined( self.eMenu[ ary + e ].val ))
         {

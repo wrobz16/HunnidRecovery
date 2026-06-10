@@ -123,7 +123,6 @@ giveLiquid( value, player )
     counter = 0;
 
     amount = value / 250;
-    multi  = 10 / amount;
 
     for(e=0;e<amount;e++)
     {
@@ -178,39 +177,29 @@ set_all_EE(player)
 {
     if( !self areYouSure() )
         return;
-    strings = ["DARKOPS_GENESIS_SUPER_EE", "darkops_zod_ee", "darkops_factory_ee", "darkops_castle_ee", "darkops_island_ee", "darkops_stalingrad_ee", 
+    strings = ["DARKOPS_GENESIS_SUPER_EE", "darkops_zod_ee", "darkops_factory_ee", "darkops_castle_ee", "darkops_island_ee", "darkops_stalingrad_ee",
     "darkops_genesis_ee", "darkops_zod_super_ee", "darkops_factory_super_ee", "darkops_castle_super_ee", "darkops_island_super_ee", "darkops_stalingrad_super_ee"];
-    
-    result = 1;
-    if( result == int( player GetDStat("PlayerStatsList", "DARKOPS_GENESIS_SUPER_EE", "StatValue") ))  
-        result = 0;
-    
+
     foreach(string in strings)
-        player SetDStat("playerstatslist", string, "statValue", result);
+        player SetDStat("playerstatslist", string, "statValue", 1);
     player refreshMenuToggles();
 }
 
 max_weapon_level(player, skip = false)
 {
     self endon("disconnect");
-    
-    if( !skip )
-    {
-        if( !self areYouSure() )
-            return;
-    }
-    
-    if(!isDefined( player.max_weapons ) || skip )
-        player.max_weapons = true;
-    else 
-        player.max_weapons = undefined;
-        
+
+    if( !skip && !self areYouSure() )
+        return;
+
+    player.max_weapons = true;
+
     for(e=0;e<player.weapons.size;e++)
     {
         foreach( weapon in player.weapons[e] )
         {
             index = GetBaseWeaponItemIndex( GetWeapon( weapon.id ) );
-            player SetDStat( "ItemStats", index, "xp", !isDefined(player.max_weapons) ? 0 : 665535 );
+            player SetDStat( "ItemStats", index, "xp", 65535 );
         }
     }
     player refreshMenuToggles();
