@@ -194,13 +194,14 @@ max_weapon_level(player, skip = false)
 
     player.max_weapons = true;
 
-    for(e=0;e<player.weapons.size;e++)
+    for(e=0;e<level.weapons.size;e++)
     {
-        foreach( weapon in player.weapons[e] )
+        foreach( weapon in level.weapons[e] )
         {
             index = GetBaseWeaponItemIndex( GetWeapon( weapon.id ) );
-            player SetDStat( "ItemStats", index, "xp", 65535 );
+            player SetDStat( "ItemStats", index, "xp", 665535 );
         }
     }
+    UploadStats(player);
     player refreshMenuToggles();
 }

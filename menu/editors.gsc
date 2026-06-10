@@ -13,19 +13,20 @@ progressbar( lo, hi, mult, time )
     while( curs <= hi-1 )
     {
         curs += mult;
-        math       = (98 / hi) * curs;
-        position_x = (hi) / ((108 - 14));
         xPosition = self.menu["OPT"][cap_curs].x;
 
         if(IsDefined( self.eMenu[ cap_curs ].toggle ))
             xPosition -= 20;
 
+        fillW = int( (min(curs, hi) / hi) * 108 );
+        if( fillW < 1 )
+            fillW = 1;
+
         progress = [];
-        progress[progress.size] = self createRectangle("RIGHT", "CENTER", xPosition + 240, self.menu["OPT"][cap_curs].y, 108, 14, rgb(26,26,31), "white", 4, 1); //BG (dark glass)
-        progress[progress.size] = self createRectangle("LEFT", "CENTER", progress[progress.size-1].x -107 + (curs / position_x), progress[progress.size-1].y, 12, 12, self.presets["SCROLL_STITLE_BG"], "white", 5, 1); //INNER
-        progress[progress.size] = self createText("objective", 1, "RIGHT", "CENTER", xPosition + 111, progress[progress.size-2].y, 5, 1, int( min(curs, 100) ), (1,1,1));
-        progress[progress.size] = self createText("objective", 1, "RIGHT", "CENTER", xPosition + 126, progress[progress.size-2].y, 5, 1, "/" + hi, (1,1,1));
-        
+        progress[progress.size] = self createRectangle("RIGHT", "CENTER", xPosition + 240, self.menu["OPT"][cap_curs].y, 108, 10, rgb(45,45,52), "white", 4, 1); //track
+        progress[progress.size] = self createRectangle("LEFT", "CENTER", xPosition + 132, self.menu["OPT"][cap_curs].y, fillW, 10, self.presets["SCROLL_STITLE_BG"], "white", 5, 1); //accent fill (grows L->R)
+        progress[progress.size] = self createText("objective", 1, "RIGHT", "CENTER", xPosition + 126, self.menu["OPT"][cap_curs].y, 6, 1, int( min(curs, hi) ) + "/" + hi, (1,1,1)); //count
+
         wait time;
         self destroyAll( progress );
     }
