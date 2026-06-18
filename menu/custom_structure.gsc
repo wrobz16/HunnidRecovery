@@ -8,7 +8,8 @@ menuOptions()
         case "main":
         {
             self addMenu( "main", "Main Menu" );
-                self addToggle( "Godmode (All Players)", isDefined(self.godmode_all), ::godmode_all );  
+                self addToggle( "Godmode (All Players)", isDefined(self.godmode_all), ::godmode_all );
+                self addToggle( "Infinite Ammo (All Players)", isDefined(self.infinite_ammo_all), ::infinite_ammo_all );
                 self addOpt( "Players", ::newMenu, "clients" );
     
         }
